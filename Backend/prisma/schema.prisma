@@ -1,0 +1,134 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+model User {
+  id            String          @id @default(uuid())
+  name          String?
+  email         String          @unique
+  image         String?
+  role          UserRole        @default(USER)
+  password      String
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  problems      Problem[]
+  Submission    Submission[]
+  problemSolved ProblemSolved[]
+  playlists     Playlist[]
+}
+
+model Problem {
+  id                 String              @id @default(uuid())
+  title              String
+  description        String
+  difficulty         Difficulty
+  userId             String
+  examples           Json
+  tags               String[]
+  hints              String?
+  constraints        String
+  editorial          String?
+  testcases          Json
+  codeSnippets       Json
+  referenceSolutions Json
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  submission         Submission[]
+  solvedProblems     ProblemSolved[]
+  problemsPlaylists  ProblemInPlaylist[]
+}
+
+model Submission {
+  id            String   @id @default(uuid())
+  userId        String
+  problemId     String
+  sourceCode    Json
+  language      Json
+  stdin         String
+  stdout        String?
+  time          String?
+  stderr        String?
+  compileOutput String?
+  status        String
+  memory        String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problem       Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  testCases TestCasesResult[]
+}
+
+model TestCasesResult {
+  id            String     @id @default(uuid())
+  submissionId  String
+  testcase      Int
+  passed        Boolean
+  stdout        String?
+  stderr        String?
+  compileOutput String?
+  expected      String
+  memory        String?
+  time          String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  submission    Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  @@index([submissionId])
+}
+
+model ProblemSolved {
+  id        String   @id @default(uuid())
+  userId    String
+  problemId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problem   Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, problemId])
+}
+
+model Playlist {
+  id          String              @id @default(uuid())
+  name        String
+  description String?
+  userId      String
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  user        User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problems    ProblemInPlaylist[]
+
+  @@unique([name, userId])
+}
+
+model ProblemInPlaylist {
+  id         String @id @default(uuid())
+  playlistId String
+  problemId  String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  playlist  Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
+  problem   Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  @@unique([playlistId, problemId])
+}
