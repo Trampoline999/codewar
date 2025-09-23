@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 const register = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { email, password, name } = req.body;
 
   // checking existing user
   try {

@@ -21,10 +21,10 @@ export const useAuthStore = create((set) => ({
     }
   },
 
-  login: async () => {
+  login: async (data) => {
     set({ isLoggingIn: true });
     try {
-      const res = await axiosInstance.get("/auth/login");
+      const res = await axiosInstance.post("/auth/login", data);
       //console.log("checking response data",res.data);
 
       set({ authUser: res.data.user });
@@ -36,10 +36,10 @@ export const useAuthStore = create((set) => ({
     }
   },
 
-  signUp: async () => {
+  signUp: async (data) => {
     set({ isSigninUp: true });
     try {
-      const res = await axiosInstance.get("/auth/register");
+      const res = await axiosInstance.post("/auth/register", data);
       //console.log("checking response data",res.data);
       set({ authUser: res.data.user });
     } catch (error) {

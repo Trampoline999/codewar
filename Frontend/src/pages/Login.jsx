@@ -10,7 +10,7 @@ import {z} from "zod"
 import { useForm } from 'react-hook-form'
 import AuthImagePattern from '../components/AuthImagePattern'
 import { useState } from 'react'
-
+import { useAuthStore } from '../store/useAuthStore.js';
 const Login = () => {
 
     const LoginSchema = z.object({
@@ -20,9 +20,17 @@ const Login = () => {
 
     const [showPassword, setShowPassword ] = useState(false)
     const {register,handleSubmit,formState:{errors},} = useForm({resolver:zodResolver(LoginSchema)})
+    const {isLoggingIn,login} = useAuthStore()
 
-    const onSubmit = async(data)=>{
-      console.log(data)
+    const onSubmit = async (data)=>{
+
+        try {
+          await login(data)
+          console.log("login data :",data)
+      } catch (error) {
+        console.log("login failed ",error)
+        
+      }
     }
 
   return (
@@ -104,10 +112,17 @@ const Login = () => {
             <button
               type="submit"
               className="btn btn-primary w-full"
-            // disabled={isLoginUp}
+             disabled={isLoggingIn}
             >
              
+             {isLoggingIn ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  Loading...
+                </>
+              ) : (
                 "Sign in"
+              )}
               
             </button>
           </form>
