@@ -136,6 +136,7 @@ const check = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "user authentication successfully done",
+      user: req.user,
     });
   } catch (error) {
     console.error("error authenticating :", error);

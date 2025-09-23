@@ -9,6 +9,7 @@ import { Code,
 import {zodResolver} from "@hookform/resolvers/zod"
 import {z} from "zod"
 import { useForm } from 'react-hook-form'
+import AuthImagePattern from '../components/AuthImagePattern'
 
 const SignUp = () => {
 
@@ -148,12 +149,12 @@ const SignUp = () => {
       </div>
 
        {/* Right Side - Image/Pattern */}
-  {/*     <AuthImagePattern
+      <AuthImagePattern
         title={"Welcome to our platform!"}
         subtitle={
           "Sign up to access our platform and start using our services."
         }
-      /> */}
+      />
     </div>
   )
   
