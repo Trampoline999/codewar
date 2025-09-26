@@ -96,6 +96,7 @@ const login = async (req, res) => {
     const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
       expiresIn: "7d",
     });
+    
     res.cookie("jwt", token, {
       httpOnly: true,
       sameSite: "strict",
@@ -124,6 +125,7 @@ const logout = async (req, res) => {
       success: true,
       message: "user logged out successfully",
     });
+    
   } catch (error) {
     console.error("error logging out user :", error);
     res.status(500).json({

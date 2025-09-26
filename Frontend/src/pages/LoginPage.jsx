@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Code,
   Eye,
@@ -9,27 +8,27 @@ import { Code,
 import {zodResolver} from "@hookform/resolvers/zod"
 import {z} from "zod"
 import { useForm } from 'react-hook-form'
-import AuthImagePattern from '../components/AuthImagePattern'
+import AuthImagePattern from '../components/AuthImagePattern.jsx'
+import { useState } from 'react'
 import { useAuthStore } from '../store/useAuthStore.js';
+const LoginPage = () => {
 
-const SignUp = () => {
-  
-    const SignUpSchema = z.object({
+    const LoginSchema = z.object({
         email:z.string().email("enter your password"),
         password:z.string().min(8,"password must be atleast must be of 8 characters"),
-        name:z.string().min(3,"name must be atleast 3 of characters")
     })
 
     const [showPassword, setShowPassword ] = useState(false)
-    const {register,handleSubmit,formState:{errors},} = useForm({resolver:zodResolver(SignUpSchema)})
-    const {isSigninUp,signUp} = useAuthStore()
+    const {register,handleSubmit,formState:{errors},} = useForm({resolver:zodResolver(LoginSchema)})
+    const {isLoggingIn,login} = useAuthStore()
 
-    const onSubmit = async(data)=>{
-      try {
-          await signUp(data)
-          console.log("sign Up data :",data)
+    const onSubmit = async (data)=>{
+
+        try {
+          await login(data)
+          console.log("login data :",data)
       } catch (error) {
-        console.log("sign up failed ",error)
+        console.log("login failed ",error)
         
       }
     }
@@ -45,36 +44,13 @@ const SignUp = () => {
                 <Code className="w-6 h-6 text-primary" />
               </div>
               <h1 className="text-2xl font-bold mt-2">Welcome </h1>
-              <p className="text-base-content/60">Sign Up to your account</p>
+              <p className="text-base-content/60">Login to your account</p>
             </div>
           </div>
 
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             
-            {/* name */}
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium">Name</span>
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Code className="h-5 w-5 text-base-content/40" />
-                </div>
-                <input
-                  type="text"
-                  {...register("name")}
-                  className={`input input-bordered w-full pl-10 ${
-                    errors.name ? "input-error" : ""
-                  }`}
-                  placeholder="John Doe"
-                />
-              </div>
-              {errors.name && (
-                <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
-              )}              
-            </div>
-
             {/* Email */}
             <div className="form-control">
               <label className="label">
@@ -136,10 +112,10 @@ const SignUp = () => {
             <button
               type="submit"
               className="btn btn-primary w-full"
-             disabled={isSigninUp}
+             disabled={isLoggingIn}
             >
              
-               {isSigninUp ? (
+             {isLoggingIn ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin" />
                   Loading...
@@ -155,8 +131,8 @@ const SignUp = () => {
           <div className="text-center">
             <p className="text-base-content/60">
               Already have an account?{" "}
-              <Link to="/login" className="link link-primary">
-                Sign in
+              <Link to="/signup" className="link link-primary">
+                login
               </Link>
             </p>
           </div>
@@ -165,9 +141,9 @@ const SignUp = () => {
 
        {/* Right Side - Image/Pattern */}
       <AuthImagePattern
-        title={"Welcome to our platform!"}
+        title={"Welcome to our platform!"} 
         subtitle={
-          "Sign up to access our platform and start using our services."
+          "login to access our platform and start using our services."
         }
       />
     </div>
@@ -175,4 +151,4 @@ const SignUp = () => {
   
 }
 
-export default SignUp
+export default LoginPage
