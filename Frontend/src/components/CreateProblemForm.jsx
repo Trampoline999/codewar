@@ -1,4 +1,3 @@
-import React from 'react'
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod"
@@ -512,12 +511,12 @@ public class Main {
 };
 
 const CreateProblemForm = () => {
+
     const [sampleType , setSampleType] = useState("DP")
     const navigation = useNavigate();
-    const {register , control , handleSubmit , reset , formState:{errors}} = useForm(
-        {
-            resolver:zodResolver(problemSchema),
-            defaultValues:{
+
+  const {register,handleSubmit,reset,control,formState:{errors}} = useForm({resolver:zodResolver(problemSchema),
+     defaultValues:{
                  testcases: [{ input: "", output: "" }],
       tags: [""],
       examples: {
@@ -536,9 +535,9 @@ const CreateProblemForm = () => {
         JAVA: "// Add your reference solution here",
       },
             }
-        }
-    )
-
+        
+  })
+          
   const {
     fields: testCaseFields,
     append: appendTestCase,
@@ -559,7 +558,7 @@ const CreateProblemForm = () => {
     name: "tags",
   });
 
-  const [isLoading , setIsLoading] = useState(false);
+    const [isLoading , setIsLoading] = useState(false);
 
   const onSubmit = async (value)=>{
    try {
@@ -1054,4 +1053,6 @@ const CreateProblemForm = () => {
   )
 }
 
-export default CreateProblemForm
+
+
+export default CreateProblemForm;

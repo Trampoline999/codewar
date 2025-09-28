@@ -80,7 +80,7 @@ const login = async (req, res) => {
     }
 
     //password matching
-    const isMatch = bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       res.status(401).json({
         message: "invalid credentials",
@@ -96,7 +96,7 @@ const login = async (req, res) => {
     const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
       expiresIn: "7d",
     });
-    
+
     res.cookie("jwt", token, {
       httpOnly: true,
       sameSite: "strict",
@@ -106,6 +106,7 @@ const login = async (req, res) => {
 
     res.status(200).json({
       success: true,
+      user,
     });
   } catch (error) {
     console.error("error logging user :", error);
@@ -125,7 +126,6 @@ const logout = async (req, res) => {
       success: true,
       message: "user logged out successfully",
     });
-    
   } catch (error) {
     console.error("error logging out user :", error);
     res.status(500).json({

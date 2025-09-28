@@ -33,7 +33,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route
             index
-            element={authUser ? <HomePage /> : <Navigate to={"/login"} />}
+            element={authUser ? <HomePage /> : <Navigate to="/login" />}
           />
           </Route>
         <Route path="/login" element={ !authUser ? <LoginPage/> :<Navigate to={"/"}/> }/>

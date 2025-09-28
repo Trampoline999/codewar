@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { Code,
   Eye,
   EyeOff,
@@ -13,6 +13,7 @@ import { useState } from 'react'
 import { useAuthStore } from '../store/useAuthStore.js';
 const LoginPage = () => {
 
+  
     const LoginSchema = z.object({
         email:z.string().email("enter your password"),
         password:z.string().min(8,"password must be atleast must be of 8 characters"),
@@ -26,7 +27,9 @@ const LoginPage = () => {
 
         try {
           await login(data)
-          console.log("login data :",data)
+         // console.log("login data :",data)
+        
+          
       } catch (error) {
         console.log("login failed ",error)
         
@@ -130,9 +133,9 @@ const LoginPage = () => {
           {/* Footer */}
           <div className="text-center">
             <p className="text-base-content/60">
-              Already have an account?{" "}
+              Don't have an account?{" "}
               <Link to="/signup" className="link link-primary">
-                login
+                SignUp
               </Link>
             </p>
           </div>

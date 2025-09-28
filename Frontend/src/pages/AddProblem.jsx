@@ -5,7 +5,7 @@ const AddProblem = () => {
   return (
     <div>
       <CreateProblemForm/>
-    </div>
+    </div> 
   )
 }
 
